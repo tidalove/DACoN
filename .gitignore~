@@ -1,0 +1,14 @@
+dataset/
+**/dataset/
+*.out
+*.pt
+*.pth
+*.log
+*.png
+*.json
+**/*.out
+**/*.log
+**/*.pt
+**/*.pth
+**/*.png
+**/*.json

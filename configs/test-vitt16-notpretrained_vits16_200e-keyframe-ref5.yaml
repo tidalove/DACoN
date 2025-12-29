@@ -1,0 +1,40 @@
+colorize_type: keyframe
+datasets:
+  clip_interval: 20
+  name: PaintBucket_Char_v2
+  val:
+    num_worker: 4
+    root: dataset/PaintBucket_Char_v2/test/PaintBucket_Char_v2/
+    save_path: outputs/
+losses:
+  loss_scale_ce: 0.5
+  loss_scale_mae: 0.2
+manual_seed: 42
+model_type: DACoN
+name: dacon_test
+network:
+  dino_input_size:
+  - 512
+  - 512
+  dino_model_type: vitt16-notpretrained_vits16_200e
+  feats_dim: 128
+  segment_pool_size:
+  - 512
+  - 512
+  unet_hidden_dim_list:
+  - 64
+  - 128
+  - 256
+  - 512
+  unet_input_dim: 3
+  unet_input_size:
+  - 512
+  - 512
+num_gpu: 1
+ref_shot: 5
+val:
+  batch_size: 1
+  save_images: true
+  save_json: true
+  save_path: outputs/
+version: '1_1'

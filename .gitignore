@@ -1,0 +1,8 @@
+dataset/
+**/dataset/
+*.out
+*.pt
+*.pth
+*.log
+*.png
+*.json
