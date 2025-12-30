@@ -233,7 +233,7 @@ def extract_color(color_image_path, seg_image_path, save_path):
     with open(save_path, "w") as f:
         json.dump(color_dict, f, indent=2)
 
-def colorize_target_image(color_list_pred, image_tgt, seg_image_tgt):
+def colorize_target_image(color_list_pred, image_tgt, seg_image_tgt, colors_only=False):
 
     image_tgt = image_tgt.permute(1,2,0)
     combined_image = torch.zeros_like(image_tgt, device=image_tgt.device) 
@@ -242,6 +242,9 @@ def colorize_target_image(color_list_pred, image_tgt, seg_image_tgt):
         mask = seg_image_tgt == i+1
         mask = mask.unsqueeze(-1).expand(-1, -1, 4).bool()
         combined_image = torch.where(mask, color/255, combined_image)
+
+    if colors_only:
+        return combined_image
     
     black_mask = (image_tgt == torch.tensor([0, 0, 0, 1], device=image_tgt.device)).all(dim=-1)
     combined_image[black_mask] = image_tgt[black_mask]

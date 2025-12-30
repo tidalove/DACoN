@@ -173,6 +173,20 @@ def make_inference_data_list(data_root, char_name, is_ref):
 
     return data_list
 
+def make_krita_inference_data_list(data_root, line_name, color_name, is_ref):
+
+    data_list = []
+
+    if is_ref:
+        frame_names = get_file_names(os.path.join(data_root, line_name, "ref"))
+    else:
+        frame_names = get_file_names(os.path.join(data_root, line_name, "target"))
+
+    for frame_name in frame_names:
+        data_list.append([line_name, color_name, frame_name])
+
+    return data_list
+
 
 
 

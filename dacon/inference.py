@@ -143,7 +143,7 @@ def main(arg):
 
                     if save_images:
                         image_pred = colorize_target_image(color_list_pred, line_image_tgt[b], seg_image_tgt[b])
-                        folder_path = os.path.join(save_path, char_name[b], "pred")
+                        folder_path = os.path.join(save_path, line_name[b], "pred")
                         os.makedirs(folder_path, exist_ok=True)
                         file_path  = os.path.join(folder_path, f"{frame_name[b]}.png")
                         image_pred = image_pred.permute(2, 0, 1)
