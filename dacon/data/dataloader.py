@@ -81,3 +81,33 @@ def dacon_single_pad_collate_fn(batch):
         "seg_image": seg_image,
     }
 
+def krita_dacon_single_pad_collate_fn(batch):
+    
+    line_name = [item['line_name'] for item in batch]
+    color_name = [item['color_name'] for item in batch]
+    frame_name = [item['frame_name'] for item in batch]
+    color_image = torch.stack([item['color_image'] for item in batch])
+    line_image = torch.stack([item['line_image'] for item in batch])
+    seg_num = torch.tensor([item['seg_num'] for item in batch])
+    seg_sizes = [item['seg_sizes'] for item in batch]
+    seg_colors = [item['seg_colors'] for item in batch]
+    seg_coords = [item['seg_coords'] for item in batch]
+    seg_image = torch.stack([item['seg_image'] for item in batch])
+
+    padded_sizes = pad_sequence(seg_sizes, batch_first=True, padding_value=-1.0)
+    padded_colors = pad_sequence(seg_colors, batch_first=True, padding_value=-1.0)
+    padded_coords = pad_sequence(seg_coords, batch_first=True, padding_value=-1.0)
+
+    return {
+        "line_name": line_name,
+        "color_name": color_name,
+        "frame_name": frame_name,
+        "color_image": color_image,
+        "line_image": line_image,
+        "seg_num": seg_num,
+        "seg_sizes": padded_sizes,
+        "seg_colors": padded_colors,
+        "seg_coords": padded_coords,
+        "seg_image": seg_image,
+    }
+

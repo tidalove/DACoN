@@ -210,7 +210,7 @@ class KritaDACoNSingleDataset(Dataset):
             json_color_path = os.path.join(self.data_root, line_name, "seg", f"{frame_name}.json")
             color_image = get_image(color_image_path)
         else:
-            line_image_path = os.path.join(self.data_root, line_name, "line", frame_name_ext)
+            line_image_path = os.path.join(self.data_root, line_name, "target", frame_name_ext)
             seg_path = os.path.join(self.data_root, line_name, "seg", frame_name_ext)
             json_color_path = os.path.join(self.data_root, line_name, "seg", f"{frame_name}.json")
             color_image = torch.zeros((0,), dtype=torch.float32)

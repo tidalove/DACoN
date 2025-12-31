@@ -182,3 +182,57 @@ class DACoNSingleDataset(Dataset):
             "seg_coords": seg_coords,
             "seg_image": seg_image,
         }
+
+class KritaDACoNSingleDataset(Dataset):
+    
+    def __init__(self, data_list, data_root, is_ref = True, mode = "infer"):
+        self.data_list = data_list
+        self.data_root = data_root
+        self.seg_size = None
+        self.is_ref = is_ref
+        self.mode = mode
+
+    def __len__(self):
+        return len(self.data_list)
+
+    def __getitem__(self, idx):
+        line_name = self.data_list[idx][0]
+        color_name = self.data_list[idx][1]
+        frame_name = self.data_list[idx][2]
+
+        frame_name_ext = frame_name
+        frame_name = os.path.splitext(frame_name)[0]
+        
+        if self.is_ref:
+            color_image_path = os.path.join(self.data_root, color_name, "ref", frame_name_ext)
+            line_image_path = os.path.join(self.data_root, line_name, "ref", frame_name_ext)
+            seg_path = os.path.join(self.data_root, line_name, "seg", "ref", frame_name_ext)
+            json_color_path = os.path.join(self.data_root, line_name, "seg", f"{frame_name}.json")
+            color_image = get_image(color_image_path)
+        else:
+            line_image_path = os.path.join(self.data_root, line_name, "target", frame_name_ext)
+            seg_path = os.path.join(self.data_root, line_name, "seg", frame_name_ext)
+            json_color_path = os.path.join(self.data_root, line_name, "seg", f"{frame_name}.json")
+            color_image = torch.zeros((0,), dtype=torch.float32)
+            json_color_path = None
+        
+        line_image = get_image(line_image_path)
+        
+        seg_num, seg_sizes, seg_colors, seg_coords, seg_image = get_seg_info(seg_path, json_color_path, self.seg_size)
+      
+        H, W = seg_image.shape
+        seg_colors = normalize_color(seg_colors)
+        seg_coords = normalize_coordinate(seg_coords, (H, W))
+
+        return {
+            "line_name": line_name,
+            "color_name": color_name,
+            "frame_name": frame_name,
+            "color_image": color_image,
+            "line_image": line_image,
+            "seg_num": seg_num,
+            "seg_sizes": seg_sizes,
+            "seg_colors": seg_colors,
+            "seg_coords": seg_coords,
+            "seg_image": seg_image,
+        }
