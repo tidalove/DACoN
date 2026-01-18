@@ -2,10 +2,10 @@ import torch
 import torch.nn.functional as F
 
 
-def segment_pooling(feats_maps, seg_images, seg_num, pool_size):
+def segment_pooling(feats_maps, seg_images, seg_num, pool_size, max_seg=0):
     B, S, C, H_feat, W_feat = feats_maps.shape
     _, _, H_seg, W_seg = seg_images.shape
-    L = int(seg_num.max().item())
+    L = int(seg_num.max().item()) if max_seg==0 else max_seg
 
     H, W = pool_size
 
@@ -20,7 +20,10 @@ def segment_pooling(feats_maps, seg_images, seg_num, pool_size):
     for s in range(S):
         seg_image = seg_images[:, s]    # [B, H, W]
         feats_map = feats_maps[:, s]    # [B, C, H_feat, W_feat]
-        max_seg_num = int(seg_num[:, s].max().item())
+        if max_seg == 0:
+            max_seg_num = int(seg_num[:, s].max().item())
+        else:
+            max_seg_num = max_seg
 
         masks = torch.stack([(seg_image == (i + 1)) for i in range(max_seg_num)])  # [L, B, H, W]
         masks = masks.permute(1, 0, 2, 3).reshape(B * max_seg_num, 1, H_seg, W_seg).float()

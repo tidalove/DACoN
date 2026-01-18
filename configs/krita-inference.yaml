@@ -13,6 +13,7 @@ datasets:
   
 network:
   feats_dim: 128
+  dino_dim: 192
 
   dino_model_type: vitt16_vitb16
   dino_input_size: [512, 512]

@@ -53,9 +53,10 @@ def check_seg_and_color(data_root, line_name, color_name):
 
 
 def run_inference(line_name, color_name,
+                  data_root='./tmp',
                   config='../configs/krita-inference.yaml',
                   model_path='../checkpoints/dacon_krita.pth',
-                  data_root='./tmp'):
+                  ):
 
     config = load_config(config)
 

@@ -6,3 +6,5 @@ dataset/
 *.log
 *.png
 *.json
+*.onnx
+*.onnx.data

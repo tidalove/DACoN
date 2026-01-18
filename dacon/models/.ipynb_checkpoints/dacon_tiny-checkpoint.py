@@ -151,7 +151,10 @@ class DACoNTinyModel(nn.Module):
     def get_dino_feats_map(self, images):
 
         B, S, C, H, W = images.shape
-        images = self._prepare_images(images, self.dino_input_size)
+        if H != self.dino_input_size[0] or W != self.dino_input_size[1] or C != 3:
+            images = self._prepare_images(images, self.dino_input_size)
+        else:
+            images = images.view(B * S, C, H, W)
         dino_output = self.dino.get_intermediate_layers(images, n=1, return_class_token=False)
         patch_tokens = dino_output[0]
         feat_H = self.dino_input_size[0] // 16
